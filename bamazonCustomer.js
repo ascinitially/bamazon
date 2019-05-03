@@ -45,19 +45,20 @@ connection.connect(function(err) {
               message: "How many would you like to buy?"
             }
         ]).then(function(answer) {
+            
             connection.query('SELECT * FROM products where ?', 
                 {
                     item_id : answer.choice
                 },
                 function(err, res) {
                     if (err) throw err;
-                
+                    var SQ = res[0].stock_quantity;
                     if (res[0].stock_quantity >= answer.quantity) {
                         console.log('Your cost is: $' + res[0].price*answer.quantity);
                         // var quantSold = res[0].stock_quantity;
                         connection.query('UPDATE products SET ? WHERE ?',
                             [{
-                                stock_quantity : res[0].stock_quantity - answer.quantity
+                                stock_quantity : SQ - answer.quantity
                             },{
                                 item_id : answer.choice
                             }],
@@ -65,7 +66,9 @@ connection.connect(function(err) {
                                 if (err) throw err;
                                 console.log(res.affectedRows + " products updated!\n");
                             }
-                        )
+                           
+                        );
+                        connection.end();
                     }else{
                         console.log('Insufficient Quantity!');
                         connection.end();
