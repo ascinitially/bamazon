@@ -1,3 +1,5 @@
+# **BAMAZON**
+
 ----bamazonCustomer.js----
 Customer can view a list of products to buy 
 Customer can "buy" those products, receive a total, and trigger updating of the database
